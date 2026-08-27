@@ -11,7 +11,7 @@ function useRegister() {
   });
   const [state,setState] = useState<'loading' | 'error' | 'idle'>('idle')
   const [error, setError] = useState('');
-  const { setUser } = useUser();
+  const { setToken } = useUser();
   const navigate = useNavigate();
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -35,7 +35,7 @@ function useRegister() {
 
             if (response) {
                 console.log('Registration successful:', response);
-                setUser(response.data);
+                setToken(response.entity);
                 navigate('/dashboard');
             }
         } catch (err) {

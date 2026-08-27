@@ -1,5 +1,4 @@
 export type Response<T> = {
-    data: T;
+    entity: T;
     message: string;
-    status: number;
 };

@@ -1,9 +1,8 @@
-import React, { createContext } from 'react';
-import { UserEntity } from '../../entities/UserEntity';
+import React, { createContext } from 'react'
 
 interface UserContextType {
-    user: UserEntity | null;
-    setUser: React.Dispatch<React.SetStateAction<UserEntity | null>>;
+    token: string | null;
+    setToken: React.Dispatch<React.SetStateAction<string | null>>;
 }
 
 export const UserContext = createContext<UserContextType | undefined>(undefined);

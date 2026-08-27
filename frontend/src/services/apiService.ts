@@ -4,7 +4,7 @@ import { RegisterRequest } from "../dto/registerRequest";
 import { LoginRequest } from "../dto/loginRequest";
 
 export const apiService = {
-    register: async (request: RegisterRequest): Promise<Response<UserEntity>> => {
+    register: async (request: RegisterRequest): Promise<Response<string>> => {
         const response = await fetch('http://localhost:8080/api/register', {
         method: 'POST',
         headers: {
@@ -17,7 +17,7 @@ export const apiService = {
         return response.json();
     },
 
-    login: async (request: LoginRequest): Promise<Response<UserEntity>> => {
+    login: async (request: LoginRequest): Promise<Response<string>> => {
         const response = await fetch('http://localhost:8080/api/login', {
             method: 'POST',
             headers: {
