@@ -1,6 +1,6 @@
-import { UserEntity } from "../../entities/UserEntity";
+import React from "react";
 
 export interface UserContextType {
-    user: UserEntity | null;
-    setUser: React.Dispatch<React.SetStateAction<UserEntity | null>>;
+    token: string | null;
+    setToken: React.Dispatch<React.SetStateAction<string | null>>;
 }

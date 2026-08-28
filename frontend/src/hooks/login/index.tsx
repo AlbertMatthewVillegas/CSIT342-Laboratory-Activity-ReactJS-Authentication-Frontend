@@ -1,8 +1,7 @@
 import { ChangeEvent, useState } from 'react';
 import { apiService } from '../../services/apiService';
-import { useUser } from '../user/hook';
 import { useNavigate } from 'react-router-dom';
-
+import { useUser } from '../user/hook';
 export const useLogin = () => {
   const [formData,setFormData] = useState({
     email:'',
@@ -10,8 +9,8 @@ export const useLogin = () => {
   });
   const [state,setState] = useState<'loading' | 'error' | 'idle'>('idle')
   const [error, setError] = useState('');
-  const { setUser } = useUser();
   const navigate = useNavigate();
+  const { setToken } = useUser();
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target
@@ -34,7 +33,7 @@ export const useLogin = () => {
 
         if (response) {
             console.log('Login successful:', response);
-            setUser(response.data);
+            setToken(response.entity);
             navigate('/dashboard');
         }
     } catch (err) {
