@@ -44,11 +44,11 @@ public class ServicesController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<ListResponseDTO<ServiceEntity>> get(
+    public ResponseEntity<ResponseDTO<ServiceEntity>> get(
             @PathVariable UUID id, 
             @AuthenticationPrincipal UUID userId
     ) {
-        return ResponseEntity.ok(new ListResponseDTO<>(
+        return ResponseEntity.ok(new ResponseDTO<>(
                 "service request fetched", 
                 service.getMine(id, userId)
         ));

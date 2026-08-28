@@ -26,11 +26,8 @@ public class ServicesService {
         return requests.findAllByCreatedBy(currentUser(userId));
     }
 
-    public List<ServiceEntity> getMine(UUID id, UUID userId) {
-        if (!userId.equals(id)) {
-            throw new UserDoesNotExistException("user does not match the authenticated user");
-        }
-        return requests.findAllByCreatedBy(currentUser(userId));
+    public ServiceEntity getMine(UUID id, UUID userId) {
+        return owned(id, userId);
     }
 
     public ServiceEntity create(ServiceRequest input, UUID userId) {
