@@ -15,26 +15,31 @@ import java.util.UUID;
 public class ApiService {
     private BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();;
     private ApiRepository repository;
+    private JwtService jwtService;
     public ApiService(
-            ApiRepository repository
+            ApiRepository repository,
+            JwtService jwtService
     ) {
         this.repository = repository;
+        this.jwtService = jwtService;
     }
 
-    public UserEntity register(RegisterRequest request){
+    public String register(RegisterRequest request){
         UserEntity existingUser = repository.findByEmail(request.getEmail());
         if(existingUser != null) {
             throw new UserAlreadyExistsException();
         }
         String hashedPassword = passwordEncoder.encode(request.getPassword());
-        return repository.save(new UserEntity(
+        UserEntity newUser = repository.save(new UserEntity(
                 request.getUsername(),
                 request.getEmail(),
                 hashedPassword
         ));
+
+        return jwtService.generateToken(newUser.getUserId().toString());
     }
 
-    public UserEntity login(LoginRequest request){
+    public String login(LoginRequest request){
         UserEntity existingUser = repository.findByEmail(request.getEmail());
         if(existingUser == null){
             throw new UserDoesNotExistException();
@@ -42,7 +47,7 @@ public class ApiService {
 
         Boolean isValid = passwordEncoder.matches(request.getPassword(), existingUser.getPassword());
         if (!isValid) throw new UserDoesNotExistException("password not valid");
-        return existingUser;
+        return jwtService.generateToken(existingUser.getUserId().toString());
     }
 
     public UserEntity getUser(UUID id) {

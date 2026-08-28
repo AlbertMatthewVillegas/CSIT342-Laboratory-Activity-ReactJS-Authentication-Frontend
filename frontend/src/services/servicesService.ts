@@ -19,8 +19,10 @@ export const requestService = {
             headers: getAuthHeaders(token),
             body: JSON.stringify(request),
         });
-        if (!response.ok)
-            throw new Error("Failed to create service request");
+        if (!response.ok) {
+            const message = await response.text();
+            throw new Error(message || `Failed to create service request (${response.status})`);
+        }
         return response.json();
     },
 

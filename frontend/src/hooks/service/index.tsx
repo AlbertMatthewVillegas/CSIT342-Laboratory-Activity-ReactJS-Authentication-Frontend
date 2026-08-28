@@ -6,47 +6,49 @@ import { ServiceRequest } from "../../dto/serviceRequest";
 
 function useService() {
     const [requests, setRequests] = useState<ServiceEntity[]>([]);
-    const [request, setRequest] = useState<ServiceRequest | null>(null);
-    const { token } = useUser();
+    const [request, setRequest] = useState<ServiceRequest>({ title: "", description: "", category: "" });
+    const [message, setMessage] = useState("");
+    const [error, setError] = useState("");
+    const { token, setToken } = useUser();
     useEffect(() => {
         const fetchRequests = async () => {
+            if (!token) return;
+
             try {
-                
-                const response = await requestService.getMyRequests(token!);
+                const response = await requestService.getMyRequests(token);
                 setRequests(response.entities);
-                console.log("Fetched service requests:", response.entities);
-                console.log("Token used for fetching:", token);
+                setError("");
             } catch (error) {
                 console.error("Failed to fetch service requests:", error);
+                setError("Unable to load your service requests.");
             }
         };
 
         fetchRequests();
-    }, []);
+    }, [token]);
 
     const createRequest = async () => {
-        if (!request) return;
-
         try {
-            console.log(token)
             const response = await requestService.createRequest(request, token!);
             setRequests(prev => [...prev, response.entity]);
-            setRequest(null); // Reset the form after successful creation
+            setRequest({ title: "", description: "", category: "" });
+            setMessage("Service request created successfully.");
+            setError("");
         } catch (error) {
             console.error("Failed to create service request:", error);
-            setRequest(null); // Reset the form after successful creation
+            setError("Unable to create the service request.");
         }
     };
 
     const updateRequest = async (id: string, newRequest: ServiceRequest) => {
-        if (!request) return;
-        
         try {
             const response = await requestService.updateRequest(id, newRequest, token!);
-            setRequest(null); // Reset the form after successful creation
+            setRequests(prev => prev.map(item => item.id === id ? response.entity : item));
+            setMessage("Service request updated successfully.");
+            setError("");
         } catch (error) {
             console.error("Failed to update service request:", error);
-            setRequest(null); // Reset the form after successful creation
+            setError("Unable to update the service request.");
         }
     };
 
@@ -54,12 +56,11 @@ function useService() {
         try {
             await requestService.deleteRequest(id, token!);
             setRequests(prev => prev.filter(req => req.id !== id));
-            
-            setRequest(null); // Reset the form after successful creation
+            setMessage("Service request deleted successfully.");
+            setError("");
         } catch (error) {
             console.error("Failed to delete service request:", error);
-            
-            setRequest(null); // Reset the form after successful creation
+            setError("Unable to delete the service request.");
         }
     };
 
@@ -75,6 +76,12 @@ function useService() {
         handleChange,
         deleteRequest,
         updateRequest,
+        message,
+        error,
+        logout: () => {
+            setToken(null);
+        },
+        token,
     };
 }
 

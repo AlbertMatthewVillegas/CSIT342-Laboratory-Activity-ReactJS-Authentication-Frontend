@@ -25,20 +25,20 @@ public class ApiController {
         this.service = service;
     }
     @PostMapping("/register")
-    public ResponseEntity<ResponseDTO<UserEntity>> register(
+    public ResponseEntity<ResponseDTO<String>> register(
             @RequestBody RegisterRequest request
     ){
-        UserEntity user = service.register(request);
-        ResponseDTO<UserEntity> response = new ResponseDTO<>("successfully registered  user",user);
+        String token = service.register(request);
+        ResponseDTO<String> response = new ResponseDTO<>("successfully registered  user",token);
         return ResponseEntity.ok(response);
     }
 
     @PostMapping("/login")
-    public ResponseEntity<ResponseDTO<UserEntity>> login(
+    public ResponseEntity<ResponseDTO<String>> login(
             @RequestBody LoginRequest request
     ){
-        UserEntity user = service.login(request);
-        ResponseDTO<UserEntity> response = new ResponseDTO<>("successfully logged in user",user);
+        String token = service.login(request);
+        ResponseDTO<String> response = new ResponseDTO<>("successfully logged in user", token);
         return ResponseEntity.ok(response);
     }
 

@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.apache.catalina.User;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import java.util.UUID;
 
@@ -19,6 +20,7 @@ public class UserEntity {
     private UUID userId;
     private String username;
     private String email;
+    @JsonIgnore
     private String password;
 
     public UserEntity(
